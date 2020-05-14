@@ -1,7 +1,5 @@
 package com.king2.longyingqing;
 
-import com.king2.longyingqing.pojo.Student;
-import com.king2.longyingqing.utils.JsonUtils;
 import com.king2.longyingqing.utils.RedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,12 +53,13 @@ public class TestRedis {
 
     @Test //添加
     public void testSet(){
-        System.out.println(redisUtil.set("STUDENT1", new Student("liuzijiang","21","江西省")));
+        redisUtil.setex("liuzijiang","louizjaig",123123);
+//        System.out.println(redisUtil.set("STUDENT1", new Student("liuzijiang","21","江西省")));
     }
 
     @Test //添加并有时间
     public void testSetX(){
-        System.out.println(redisUtil.setex("STUDENT2", new Student("liuzijiang","21","江西省"),200));
+        //System.out.println(redisUtil.setex("STUDENT2", new Student("liuzijiang","21","江西省"),200));
     }
 
     @Test//对key递增
@@ -76,9 +75,9 @@ public class TestRedis {
 
     @Test //获取
     public void getSet(){
-        String student = redisUtil.get("STUDENT1");
-        Student student1 = JsonUtils.jsonToPojo(student, Student.class);
-        System.out.println(student1);
+//        String student = redisUtil.get("STUDENT1");
+//        Student student1 = JsonUtils.jsonToPojo(student, Student.class);
+//        System.out.println(student1);
     }
 
 

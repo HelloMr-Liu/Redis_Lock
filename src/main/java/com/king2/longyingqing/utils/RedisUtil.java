@@ -35,7 +35,6 @@ public class RedisUtil {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-
     /**
      * 分布式加锁
      *

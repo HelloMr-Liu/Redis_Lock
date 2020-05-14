@@ -17,10 +17,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 //引入多个配置文件
 @PropertySources(
-    {@PropertySource(value = "classpath:RedisConfiguration.properties",encoding = "utf-8")}
+    {@PropertySource(value = "classpath:redisConfig.properties",encoding = "utf-8")}
 )
-//开启定时任务
-@EnableScheduling
 public class Redis_Distributed_LockMain {
     public static void main(String[] args) {
         SpringApplication.run(Redis_Distributed_LockMain.class);

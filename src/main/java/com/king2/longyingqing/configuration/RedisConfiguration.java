@@ -24,7 +24,7 @@ public class RedisConfiguration {
      * Redis配置
      * @param redisConnectionFactory
      * @return org.springframework.data.redis.core.RedisTemplate<java.lang.String,java.lang.Object>
-     * @author zxzhang
+     * @author 刘梓江
      * @date 2019/7/1
      */
     @Bean
