@@ -19,6 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes={Redis_Distributed_LockMain.class})
 public class TestRedis {
 
+
+
     @Autowired
     private RedisUtil redisUtil;
 
@@ -37,12 +39,12 @@ public class TestRedis {
     //指定key缓存失效时间
     @Test
     public void testExpire(){
-        System.out.println("指定key缓存失效时间："+redisUtil.expire("aaa",60));
+        System.out.println("指定key缓存失效时间："+redisUtil.expire("liuzijiang",60));
     }
     //根据key 获期时间
     @Test
     public void testGetExpire(){
-        System.out.println("根据key 获取过期时间："+redisUtil.getExpire("STUDENT2"));
+        System.out.println("根据key 获取过期时间："+redisUtil.getExpire("liuzijiang"));
     }
 
     //删除key
@@ -53,7 +55,8 @@ public class TestRedis {
 
     @Test //添加
     public void testSet(){
-        redisUtil.setex("liuzijiang","louizjaig",123123);
+        redisUtil.setDataBase(7);
+        redisUtil.setex("98k2","louizjaig",123123);
 //        System.out.println(redisUtil.set("STUDENT1", new Student("liuzijiang","21","江西省")));
     }
 

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import org.springframework.util.CollectionUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.Protocol;
-import redis.clients.jedis.util.SafeEncoder;
+import redis.clients.util.SafeEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +33,28 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     private Logger logger = LoggerFactory.getLogger(RedisUtil.class);
+
+    /**
+     * 注入：redis操作模板
+     */
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+
+    /**
+     * 设置指定的缓存数据库(0-15),如果不在这个范围默认在最后一个缓存数据库上(15)
+     * @param number
+     */
+    public void setDataBase(int number){
+        //获取当前缓存模板对应的连接工厂
+        JedisConnectionFactory connectionFactory = (JedisConnectionFactory)redisTemplate.getConnectionFactory();
+        if(number<0||number>15){
+            connectionFactory.setDatabase(15);
+        }else{
+            connectionFactory.setDatabase(number);
+        }
+    }
+
 
     /**
      * 分布式加锁

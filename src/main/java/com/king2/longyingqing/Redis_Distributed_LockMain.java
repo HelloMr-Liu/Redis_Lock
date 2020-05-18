@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * ================================================================
@@ -17,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 //引入多个配置文件
 @PropertySources(
-    {@PropertySource(value = "classpath:redisConfig.properties",encoding = "utf-8")}
+    {@PropertySource(value = "classpath:redis_config.properties",encoding = "utf-8")}
 )
 public class Redis_Distributed_LockMain {
     public static void main(String[] args) {
