@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * ================================================================
@@ -23,6 +25,16 @@ public class TestRedis {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private JedisPool jedisPool;
+
+    @Test
+    public void demoJedisPool(){
+        Jedis resource = jedisPool.getResource();
+        resource.set("123123","777777777777777");
+
+    }
 
     //判断key是否存在
     @Test
@@ -55,8 +67,8 @@ public class TestRedis {
 
     @Test //添加
     public void testSet(){
-        redisUtil.setDataBase(7);
-        redisUtil.setex("98k2","louizjaig",123123);
+        redisUtil.setDataBase(14);
+        redisUtil.setex("98k2TTT","98k2TTT",77777);
 //        System.out.println(redisUtil.set("STUDENT1", new Student("liuzijiang","21","江西省")));
     }
 

@@ -14,6 +14,7 @@ import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
@@ -45,6 +46,9 @@ public class RedisConfiguration {
     @Value("${spring.redis.jedis.pool.min-idle}")
     private int minIdle;
 
+    @Value("${spring.redis.timeout}")
+    private int timeout;
+
 
     /**
      * 连接池配置信息
@@ -68,21 +72,19 @@ public class RedisConfiguration {
         return poolConfig;
     }
 
-    //
-//    @Bean
-//    public JedisPool redisPoolFactory()  throws Exception{
-//        log.info("JedisPool注入成功！！");
-//        log.info("redis地址：" + host + ":" + port);
-//        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-//        jedisPoolConfig.setMaxIdle(maxIdle);
-//        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
-//        // 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true
-//        jedisPoolConfig.setBlockWhenExhausted(blockWhenExhausted);
-//        // 是否启用pool的jmx管理功能, 默认true
-//        jedisPoolConfig.setJmxEnabled(true);
-//        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
-//        return jedisPool;
-//    }
+
+    /**
+     * 注入：连接池
+     * @param jedisPoolConfig
+     * @return
+     * @throws Exception
+     */
+    @Bean
+    public JedisPool jedisPool(JedisPoolConfig jedisPoolConfig)  throws Exception{
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig, hostName, port, timeout, password,initDB);
+        return jedisPool;
+    }
+
 
 
     /**
