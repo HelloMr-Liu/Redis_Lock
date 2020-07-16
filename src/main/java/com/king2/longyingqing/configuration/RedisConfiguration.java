@@ -1,9 +1,13 @@
 package com.king2.longyingqing.configuration;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.ParserConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.king2.longyingqing.Serializer.FastJson2JsonRedisSerializer;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +17,14 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.util.Assert;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.nio.charset.Charset;
 
 /**
  * ================================================================
@@ -148,6 +157,52 @@ public class RedisConfiguration {
         return redisTemplate;
     }
 
+}
 
+/**
+ * 描述： 对象Fastjson进行序列化设置
+ * @author 刘梓江
+ * @date   2020/7/9 13:54
+ */
+class FastJson2JsonRedisSerializer<T> implements RedisSerializer<T> {
+    private ObjectMapper objectMapper = new ObjectMapper();
+    public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
+    private Class<T> clazz;
+
+    static {
+        ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+        ParserConfig.getGlobalInstance().addAccept("com.openailab.oascloud");
+
+    }
+
+    public FastJson2JsonRedisSerializer(Class<T> clazz) {
+        super();
+        this.clazz = clazz;
+    }
+
+    public byte[] serialize(T t) throws SerializationException {
+        if (t == null) {
+            return new byte[0];
+        }
+        return JSON.toJSONString(t, SerializerFeature.WriteClassName).getBytes(DEFAULT_CHARSET);
+    }
+
+    public T deserialize(byte[] bytes) throws SerializationException {
+        if (bytes == null || bytes.length <= 0) {
+            return null;
+        }
+        String str = new String(bytes, DEFAULT_CHARSET);
+
+        return JSON.parseObject(str, clazz);
+    }
+
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        Assert.notNull(objectMapper, "'objectMapper' must not be null");
+        this.objectMapper = objectMapper;
+    }
+
+    protected JavaType getJavaType(Class<?> clazz) {
+        return TypeFactory.defaultInstance().constructType(clazz);
+    }
 }
